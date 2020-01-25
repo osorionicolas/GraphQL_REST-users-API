@@ -1,0 +1,45 @@
+<html>
+	<head>
+		<script src="script.js"></script>
+		<script src="jquery.js"></script>
+		<script src="popper.js"></script>
+		<script src="bootstrap.js"></script>
+		<link rel="stylesheet" href="bootstrap.css">
+		<link rel="stylesheet" href="fontawesome.css">
+	</head>
+	<body>
+		<h1 class="text-center">Hello GraphQL!<h1>
+		<br>
+		<h3>Roles / Users<h3>
+		<button class="btn btn-primary" onclick='graphQLAjax({query: "{ roles(rolename:null) { id, name } }" },graphQLQuery)'>Get Roles</button>
+		<button class="btn btn-primary" onclick='graphQLAjax({query: "{ users(username:null) { id, username, roles{ id, name } } }" },graphQLQuery)'>Get Users</button>
+		<br>
+		<table class="table table-striped text-center">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody id="tbody">
+			</tbody>
+		</table>
+		
+		<div id="assigmentsTable" style="display:none">
+			<h3>Role Assigments<h3>
+			<table class="table table-striped text-center">
+				<thead>
+					<tr>
+						<th>User ID</th>
+						<th>Username</th>
+						<th>Role ID</th>
+						<th>Role Name</th>
+					</tr>
+				</thead>
+				<tbody id="tbodyAssigments">
+				</tbody>
+			</table>
+		</div>
+	</body>
+</html>
