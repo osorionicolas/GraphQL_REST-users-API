@@ -10,8 +10,6 @@ public class Utils
 		}
 		catch(NumberFormatException nfe) {
 			return false;
-		}
-		
-				
+		}	
 	}
 }

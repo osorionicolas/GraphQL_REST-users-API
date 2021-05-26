@@ -6,7 +6,11 @@
         "lastName": "Frazier",
         "email": "dennis.frazier@example.com",
         "password": "camden",
-        "active": true
+        "active": true,
+        "roles": {
+        	"id": 1,
+        	"name": "user"
+        }
     },
     {
         "id": 2,
@@ -15,6 +19,7 @@
         "lastName": "Rasmussen",
         "email": "christian.rasmussen@example.com",
         "password": "hooker",
-        "active": true
+        "active": true,
+        "roles": [2]
     }
 ]

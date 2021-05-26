@@ -39,14 +39,14 @@ public class RolesController
     RoleRepository roleRepository;
 	
 	@GetMapping(value = {"", "/"})
-	public Iterable<Role> index(@RequestParam("name") Optional<String> rolename)
+	public Iterable<Role> getByName(@RequestParam("name") Optional<String> rolename)
 	{
 		log.debug("Accediendo a index() con name = {}", rolename);
 		return roleRepository.findByNameContaining(rolename.orElse(""));
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Role> get(@PathVariable(value = "id") Long roleId) 
+	public ResponseEntity<Role> getById(@PathVariable(value = "id") Long roleId) 
 	{
 		log.debug("Accediendo a get() con id = {}", roleId);
 	    Role role = roleRepository.findById(roleId).orElse(null);

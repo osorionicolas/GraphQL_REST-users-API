@@ -142,23 +142,21 @@ public class UsersController
 	    return ResponseEntity.ok().build();
 	}
 	
-	@PostMapping("/{id}/roles")
-	public ResponseEntity<User> assignRole(@PathVariable(value = "id") String userId, @RequestBody Role role) 
+	@PostMapping("/{userId}/roles/{roleId}")
+	public ResponseEntity<User> assignRole(@PathVariable String userId, @PathVariable Long roleId) 
 	{
-		log.debug("Accediendo a assignRole() con User = {} y Role = {}", userId, role.getId());
+		log.debug("Accediendo a assignRole() con User = {} y Role = {}", userId, roleId);
 		User user =  this.loadUser(userId);
 	    if(user == null) 
 	    {
 	        return ResponseEntity.notFound().build();
 	    }
 	    
-	    role = roleRepository.findById(role.getId()).orElse(null);
-	    if(role == null) 
-	    {
-	        return ResponseEntity.notFound().build();
-	    }
+	    Role _role = roleRepository.findById(roleId).orElse(null);
 	    
-	    user.getRoles().add(role);
+	    if(_role == null) return ResponseEntity.notFound().build();
+	    
+	    user.getRoles().add(_role);
 	    return ResponseEntity.ok(userRepository.save(user));
 	}
 	
@@ -222,12 +220,9 @@ public class UsersController
 	public User deleteUser(Long userId)
 	{
 		log.debug("Accediendo a deleteUser() con user = {}", userId);
-		User user = this.userRepository.findById(userId).orElse(null);
-	    if(user != null) 
-	    {
-		    userRepository.delete(user);
-	    }
-	    return user;
+		Optional<User> user = this.userRepository.findById(userId);
+		user.ifPresent(userRepository :: delete);
+	    return user.orElse(null);
 	}
 	
     @GraphQLMutation
@@ -235,10 +230,7 @@ public class UsersController
 		
 		log.debug("Accediendo a updateUser() con User = {}", userDetails.toString());
 		User user = this.userRepository.findById(userId).orElse(null);
-	    if(user == null) 
-	    {
-	        return null;
-	    }
+	    if(user == null) return null;
 	    user.setFirstName(userDetails.getFirstName());
 	    user.setLastName(userDetails.getLastName());
 	    user.setUsername(userDetails.getUsername());
@@ -253,10 +245,7 @@ public class UsersController
 		
 		log.debug("Accediendo a patchUser() con deltas = {}", changes.toString());
 		User user = this.userRepository.findById(userId).orElse(null);
-	    if(user == null) 
-	    {
-	        return null;
-	    }
+	    if(user == null) return null;
 	    if(changes.containsKey("firstName")) user.setFirstName(changes.get("firstName"));
 	    if(changes.containsKey("lastName")) user.setLastName(changes.get("lastName"));
 	    if(changes.containsKey("username")) user.setUsername(changes.get("username"));
@@ -272,16 +261,10 @@ public class UsersController
 	{
 		log.debug("Accediendo a addRole() con User = {} y Role = {}", userId, roleId);
 		User user =  this.userRepository.findById(userId).orElse(null);
-	    if(user == null) 
-	    {
-	        return null;
-	    }
+	    if(user == null) return null;
 	    
 	    Role role = roleRepository.findById(roleId).orElse(null);
-	    if(role == null) 
-	    {
-	        return null;
-	    }
+	    if(role == null) return null;
 	    
 	    user.getRoles().add(role);
 	    return userRepository.save(user);
@@ -292,16 +275,10 @@ public class UsersController
 	{
 		log.debug("Accediendo a removeRole() con User = {} y Role = {}", userId, roleId);
 		User user =  this.userRepository.findById(userId).orElse(null);
-	    if(user == null) 
-	    {
-	    	return null;
-	    }
+	    if(user == null) return null;
 	    
 	    Role role = roleRepository.findById(roleId).orElse(null);
-	    if(role == null) 
-	    {
-	        return null;
-	    }
+	    if(role == null) return null;
 	    
 	    user.getRoles().remove(role);
 	    return userRepository.save(user);
